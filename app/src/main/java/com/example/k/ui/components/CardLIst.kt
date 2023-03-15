@@ -13,8 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.k.data.ui.listdata
-import com.example.k.ui.components.ContactItem
+import com.example.k.data.db.ContactPerson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -69,8 +68,12 @@ fun CardListPreview() {
     CardList(
         itemFetcher = {
             List(4) {
-                listdata(
-                    12384, "Hola", "Just hello world!"
+                ContactPerson(
+                    uid = 123456,
+                    user_name = "asd",
+                    birthday_date = Date(2015 - 1900, 11, 30, 23, 59, 59),
+                    relation = 1,
+                    sex = 1
                 )
             }
         },

@@ -12,21 +12,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.k.data.ui.listdata
+import com.example.k.data.db.ContactPerson
+import com.example.k.data.db.Conversation
+import java.util.*
 
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun ContactItem(
     navToChat:(Long)->Unit,
-    data: listdata
+    data: ContactPerson
 ) {
     Card(
         modifier = Modifier
-            .clickable { navToChat(data.id) },
+            .clickable { navToChat(data.uid) },
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.primaryContainer)
     ) {
@@ -43,12 +44,14 @@ fun ContactItem(
             )
 
             Column{
+                data.user_name?.let {
+                    Text(
+                        text = it,
+                        fontSize = 20.sp
+                    )
+                }
                 Text(
-                    text = data.name,
-                    fontSize = 20.sp
-                )
-                Text(
-                    text = data.id.toString(),
+                    text = data.uid.toString(),
                     fontSize = 15.sp
                 )
             }
@@ -62,10 +65,12 @@ fun ContactItem(
 fun PreviewContactItem(){
     ContactItem(
         navToChat ={} ,
-        data = listdata(
-            12345,
-            "Tom",
-            "hello"
+        ContactPerson(
+            uid = 123456,
+            user_name = "asd",
+            birthday_date = Date(2015 - 1900, 11, 30, 23, 59, 59),
+            relation = 1,
+            sex = 1
         )
     )
 }

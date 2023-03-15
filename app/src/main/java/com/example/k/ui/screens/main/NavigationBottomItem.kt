@@ -1,4 +1,4 @@
-package com.example.k.data.ui
+package com.example.k.ui.screens.main
 
 import androidx.compose.ui.graphics.vector.ImageVector
 

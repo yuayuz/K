@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.k.data.ui.NavigationBottomItem
+import com.example.k.ui.screens.main.NavigationBottomItem
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,12 +76,12 @@ fun BottomNavBarPreview() {
         NavigationBottomItem(
             "_",
             Icons.Filled.DateRange,
-            Icons.Filled.Home,
+            Icons.Filled.DateRange,
         ),
         NavigationBottomItem(
             "_",
             Icons.Filled.Person,
-            Icons.Filled.Home,
+            Icons.Filled.Person,
         )
     )
     val rnc = rememberNavController()

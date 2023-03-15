@@ -10,7 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.k.ui.screens.MainFrame
+import com.example.k.ui.screens.login.Loginscreen
+import com.example.k.ui.screens.main.MainFrame
 import com.example.k.ui.theme.KTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,5 +26,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    MainFrame()
+//    MainFrame()
+    Loginscreen({})
 }
