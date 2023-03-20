@@ -1,13 +1,16 @@
-package com.example.k.ui.screens
+package com.example.k.ui.screens.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.k.data.db.Conversation
+import com.example.k.data.viewmodel.ChatListScreenViewModelSingleton
 import com.example.k.ui.components.CardList
 import com.example.k.ui.components.ChatItem
 import java.util.*
@@ -16,7 +19,10 @@ import java.util.*
 fun ChatListScreen(
     contentPadding: PaddingValues,
     navToChat: (Long) -> Unit
-){
+) {
+    val viewModel = ChatListScreenViewModelSingleton()
+    val uiState by viewModel.state.collectAsState()
+
     Column(
         Modifier
             .fillMaxSize()
@@ -24,7 +30,9 @@ fun ChatListScreen(
             .padding(horizontal = 10.dp)
     ) {
         CardList(
-            itemFetcher = { ChatDataList},
+            itemFetcher = {
+                uiState.list
+            },
             itemRender = {
                 ChatItem(navToChat, it)
             }

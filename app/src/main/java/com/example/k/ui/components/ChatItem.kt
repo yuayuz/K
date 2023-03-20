@@ -46,9 +46,7 @@ fun ChatItem(
                         contentDescription = "chat"
                     )
 
-                    Column(
-
-                    ) {
+                    Column {
                         Text(text = data.chat_name)
                         Text(
                             text = data.last_msg,

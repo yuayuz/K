@@ -16,7 +16,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.k.data.db.ContactPerson
-import com.example.k.data.db.Conversation
 import java.util.*
 
 @SuppressLint("SimpleDateFormat")
@@ -44,12 +43,10 @@ fun ContactItem(
             )
 
             Column{
-                data.user_name?.let {
-                    Text(
-                        text = it,
-                        fontSize = 20.sp
-                    )
-                }
+                Text(
+                    text = data.user_name,
+                    fontSize = 20.sp
+                )
                 Text(
                     text = data.uid.toString(),
                     fontSize = 15.sp

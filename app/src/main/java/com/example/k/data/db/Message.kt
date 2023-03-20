@@ -44,22 +44,22 @@ data class Message(
 interface MessageDao{
 
     @Query("SELECT * FROM Message")
-    suspend fun getall(): Message?
+    suspend fun getAll(): Message?
 
     @Query("SELECT * FROM Message WHERE msg_id=:msg_id")
-    suspend fun getone(msg_id: Long): Message?
+    suspend fun getOne(msg_id: Long): Message?
 
     @Insert
-    suspend fun insertone(account: Message)
+    suspend fun insertOne(account: Message)
 
     @Update
-    suspend fun updateone(account: Message)
+    suspend fun updateOne(account: Message)
 }
 
 @TypeConverters(DateConverter::class)
 @Database(entities = [Message::class], version = 1,exportSchema=false)
 abstract class MessageDatabase : RoomDatabase() {
-    abstract fun messagedao(): MessageDao
+    abstract fun messageDao(): MessageDao
 }
 
 object MessageDbSingleton {
@@ -81,7 +81,7 @@ object MessageDbSingleton {
                         )
                 }
 
-            val dao = db.get().messagedao()
+            val dao = db.get().messageDao()
             db.get()
         }
 }

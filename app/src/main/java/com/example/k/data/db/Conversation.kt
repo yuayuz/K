@@ -40,22 +40,22 @@ data class Conversation(
 @Dao
 interface ConversationDao{
     @Query("SELECT * FROM Conversation")
-    suspend fun getall(): Conversation?
+    suspend fun getAll(): Conversation?
 
     @Query("SELECT * FROM Conversation WHERE uid=:uid")
-    suspend fun getone(uid: Long): Conversation?
+    suspend fun getOne(uid: Long): Conversation?
 
     @Insert
-    suspend fun insertone(account: Conversation)
+    suspend fun insertOne(account: Conversation)
 
     @Update
-    suspend fun updateone(account: Conversation)
+    suspend fun updateOne(account: Conversation)
 }
 
 @TypeConverters(DateConverter::class)
 @Database(entities = [Conversation::class], version = 1,exportSchema=false)
 abstract class ConversationDatabase : RoomDatabase() {
-    abstract fun conversationdao(): ConversationDao
+    abstract fun conversationDao(): ConversationDao
 }
 
 object ConversationDbSingleton {
@@ -77,7 +77,7 @@ object ConversationDbSingleton {
                         )
                 }
 
-            val dao = db.get().conversationdao()
+            val dao = db.get().conversationDao()
             db.get()
         }
 }

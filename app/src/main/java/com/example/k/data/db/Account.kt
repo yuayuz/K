@@ -9,23 +9,23 @@ import java.util.Optional
 data class Account(
     @PrimaryKey
     @ColumnInfo(name = "id") val id: Long,
-    @ColumnInfo(name = "name") val name: String,
+//    @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "password") val password: String
 )
 
 @Dao
 interface AccountDao {
     @Query("SELECT * FROM Account")
-    suspend fun getall(): Account?
+    suspend fun getAll(): Account?
 
     @Query("SELECT * FROM Account WHERE id=:id")
-    suspend fun getone(id: Long): Account?
+    suspend fun getOne(id: Long): Account?
 
     @Insert
-    suspend fun insertone(account: Account)
+    suspend fun insertOne(account: Account)
 
     @Update
-    suspend fun updateone(account: Account)
+    suspend fun updateOne(account: Account)
 }
 
 @Database(entities = [Account::class], version = 1, exportSchema = false)

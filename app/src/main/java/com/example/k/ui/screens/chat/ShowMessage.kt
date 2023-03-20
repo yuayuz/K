@@ -5,24 +5,18 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.k.data.db.Message
+import com.example.k.ui.screens.chat.components.MessageLeftItem
+import com.example.k.ui.screens.chat.components.MessageRightItem
 import java.util.*
 
 @Composable
 fun ShowMessage(
-    msglist:List<Message>
+    msgList:List<Message>
 ){
-    LazyColumn(
-
-    ){
-//        msglist.forEach{
-//            if (it.is_me == false)
-//                MessageLeftItem(msg = it)
-//            else
-//                MessageRightItem(msg = it)
-//        }
-        items(items = msglist){
+    LazyColumn {
+        items(items = msgList){
                 item ->
-            if (item.is_me  == false)
+            if (!item.is_me)
                 MessageLeftItem(msg = item)
             else
                 MessageRightItem(msg = item)
@@ -190,5 +184,5 @@ fun PreviewShowMessage(){
             send_status = 1
         ),
         )
-    ShowMessage(msglist = msg )
+    ShowMessage(msgList = msg )
 }

@@ -1,4 +1,4 @@
-package com.example.k.ui.screens
+package com.example.k.ui.screens.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues

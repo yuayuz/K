@@ -1,95 +1,88 @@
 package com.example.k.ui.screens.main
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.k.ui.screens.main.NavigationBottomItem
 import com.example.k.route.AppRoute
-import com.example.k.ui.components.BottomNavBar
-import com.example.k.ui.components.TopBar
-import com.example.k.ui.screens.ChatListScreen
-import com.example.k.ui.screens.ContactScreen
-import com.example.k.ui.screens.Third
 import com.example.k.ui.screens.chat.Chat
-import com.example.k.ui.screens.login.Loginscreen
+import com.example.k.ui.screens.chat.components.ChatPageBottomBar
+import com.example.k.ui.screens.chat.components.ChatPageTopBar
+import com.example.k.ui.screens.login.loginScreen
+import com.example.k.ui.screens.login.registerScreen
+import com.example.k.ui.screens.login.reviseScreen
+import com.example.k.ui.screens.main.components.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun MainFrame() {
 
+    val ctx = LocalContext.current
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    val drawerState=scaffoldState.drawerState
+    val drawerState = scaffoldState.drawerState
     val navController = rememberNavController()
     var title by remember { mutableStateOf("Main") }
     val idNavArg = navArgument("id") { type = NavType.LongType }
     val getIdNavArg = { entry: NavBackStackEntry ->
         entry.arguments!!.getLong("id")
     }
-    var isLogin by remember { mutableStateOf(true) }
-    var MainStatus by remember { mutableStateOf(true) }
+//    var isLogin by remember { mutableStateOf(true) }
+    var mainStatus by remember { mutableStateOf(0) }
     Scaffold(
 //        contentWindowInsets = WindowInsetsEmpty,
-        scaffoldState=scaffoldState,
+        scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            if (MainStatus) {
-                TopBar(title){
-                    scope.launch{
-                        if(drawerState.isClosed) drawerState.open() else drawerState.close()
+            if (mainStatus == 1) {
+                TopBar(title) {
+                    scope.launch {
+                        if (drawerState.isClosed) drawerState.open() else drawerState.close()
                     }
+                }
+            } else if (mainStatus == 2) {
+                ChatPageTopBar(title = "1") {
+                    navController.navigate(AppRoute.CHAT_LIST)
                 }
             }
         },
         drawerContent = {
-            Text(text = "drawerContent")
+            DrawerContentTopBar()
+            drawerMenu(
+                dataDrawerList
+            ) {
+                navController.navigate(it)
+            }
         },
         bottomBar = {
-            val dataList = listOf(
-                NavigationBottomItem(
-                    route = AppRoute.CHAT_LIST,
-                    icon = Icons.Filled.Home,
-                    selectedIcon = Icons.Filled.Home
-                ),
-                NavigationBottomItem(
-                    route = AppRoute.CONTACT,
-                    icon = Icons.Filled.DateRange,
-                    selectedIcon = Icons.Filled.Home
-                ),
-                NavigationBottomItem(
-                    route = AppRoute.THIRD,
-                    icon = Icons.Filled.Person,
-                    selectedIcon = Icons.Filled.Home
-                )
-            )
-            if (MainStatus) {
+            dataList
+            if (mainStatus == 1) {
                 BottomNavBar(navController, dataList) {
                     navController.navigate(it)
                 }
+            } else if (mainStatus == 2) {
+                ChatPageBottomBar()
             }
-
         }
     ) { MainPadding ->
         NavHost(
             navController = navController, startDestination = AppRoute.LOGIN//AppRoute.CHAT_LIST
         ) {
             composable(AppRoute.CHAT_LIST) {
-                MainStatus = true
+                mainStatus = 1
                 ChatListScreen(
                     contentPadding = MainPadding,
                     navToChat = { id: Long ->
@@ -102,12 +95,12 @@ fun MainFrame() {
                 "${AppRoute.CHAT}/{id}",
                 arguments = listOf(idNavArg)
             ) { entry ->
-                MainStatus = false
+                mainStatus = 2
                 val id = getIdNavArg(entry)
-                Chat(navController)
+                Chat()
             }
             composable(AppRoute.CONTACT) {
-                MainStatus = true
+                mainStatus = 1
                 ContactScreen(
                     contentPadding = MainPadding,
                     navToChat = { id: Long ->
@@ -117,25 +110,92 @@ fun MainFrame() {
             }
 
             composable(AppRoute.THIRD) {
-                title = "Third"
-                MainStatus = true
+                mainStatus = 1
                 Third(MainPadding)
             }
             composable(AppRoute.LOGIN) {
-                title = "Login"
-                MainStatus = false
-                Loginscreen {
-                    navController.navigate(AppRoute.CHAT_LIST)
-                }
+                mainStatus = 0
+                loginScreen(
+                    contentPadding = MainPadding,
+                    navToMain = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            navController.navigate(AppRoute.CHAT_LIST)
+                        }
+                    },
+                    navToLogin = { navController.navigate(AppRoute.REGISTER) },
+                    showNoRegister = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(ctx, "帐号未注册", Toast.LENGTH_SHORT).show()
+                            navController.navigate(AppRoute.REGISTER)
+                        }
+                    },
+                    showMistake = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(ctx, "帐号/密码错误", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    navToRevise = {
+                        navController.navigate(AppRoute.REVISE)
+                    }
+                )
             }
 
             composable(AppRoute.MAIN) {
-                MainStatus = true
                 MainFrame()
             }
 
+            composable(AppRoute.REGISTER) {
+                mainStatus = 0
+                registerScreen(
+                    contentPadding = MainPadding,
+                    sNavToLogin = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(ctx, "帐号注册成功", Toast.LENGTH_SHORT).show()
+                            navController.navigate(AppRoute.LOGIN)
+                        }
+                    },
+                    navToLogin = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            navController.navigate(AppRoute.LOGIN)
+                        }
+                    },
+                    showRegistered = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(ctx, "帐号已注册", Toast.LENGTH_SHORT).show()
+                            navController.navigate(AppRoute.LOGIN)
+                        }
+                    }
+                )
+            }
+            composable(AppRoute.REVISE) {
+                mainStatus = 0
+                reviseScreen(
+                    contentPadding = MainPadding,
+                    sNavToLogin = {
+                        Toast.makeText(ctx, "帐号密码修改成功", Toast.LENGTH_SHORT).show()
+                        navController.navigate(AppRoute.LOGIN)
+                    },
+                    navToLogin = { navController.navigate(AppRoute.LOGIN) },
+                    navToChatList = {},
+                    from = true
+                )
+            }
 
+            composable(AppRoute.FORGET) {
+                mainStatus = 0
+                reviseScreen(
+                    contentPadding = MainPadding,
+                    sNavToLogin = {
+                        Toast.makeText(ctx, "帐号密码修改成功", Toast.LENGTH_SHORT).show()
+                        navController.navigate(AppRoute.LOGIN)
+                    },
+                    navToLogin = { navController.navigate(AppRoute.LOGIN) },
+                    navToChatList = { navController.navigate(AppRoute.CHAT_LIST) },
+                    from = false
+                )
+            }
         }
 
     }
 }
+

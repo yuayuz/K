@@ -21,22 +21,22 @@ data class ContactPerson(
 @Dao
 interface ContactPersonDao {
     @Query("SELECT * FROM ContactPerson")
-    suspend fun getall(): ContactPerson?
+    suspend fun getAll(): ContactPerson?
 
     @Query("SELECT * FROM ContactPerson WHERE uid=:uid")
-    suspend fun getone(uid: Long): ContactPerson?
+    suspend fun getOne(uid: Long): ContactPerson?
 
     @Insert
-    suspend fun insertone(contactperson: ContactPerson)
+    suspend fun insertOne(ContactPerson: ContactPerson)
 
     @Update
-    suspend fun updateone(contactperson: ContactPerson)
+    suspend fun updateOne(ContactPerson: ContactPerson)
 }
 
 @TypeConverters(DateConverter::class)
 @Database(entities = [ContactPerson::class], version = 1, exportSchema = false)
 abstract class ContactPersonDatabase : RoomDatabase() {
-    abstract fun contactpersondao(): ContactPersonDao
+    abstract fun contactPersonDao(): ContactPersonDao
 }
 
 object ContactPersonDbSingleton {
@@ -58,9 +58,9 @@ object ContactPersonDbSingleton {
                         )
                 }
 
-            val dao = db.get().contactpersondao()
-            /*if (dao.getall() == null)
-                dao.insertone(
+            val dao = db.get().contactPersonDao()
+            /*if (dao.getAll() == null)
+                dao.insertOne(
                     ContactPerson(
                         uid = 0,
                         user_name = null,
