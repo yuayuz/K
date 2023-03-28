@@ -198,12 +198,21 @@ fun MainFrame() {
             composable(AppRoute.NEW_FRIEND) {
                 mainStatus = 0
                 newFriendScreen(
-                    contentPadding = MainPadding,
-                    navTOChatList = {navController.navigate(AppRoute.CHAT_LIST)}
+//                    contentPadding = MainPadding,
+                    navTOChatList = { navController.navigate(AppRoute.CHAT_LIST) },
+                    navTOFriendMessage = {}
                 )
             }
-        }
 
+            composable(AppRoute.NEW_FRIEND_Message) {
+                mainStatus = 0
+                FriendMessageScreen(
+                    navTONewFriend = { navController.navigate(AppRoute.NEW_FRIEND) },
+                    navToChatList = { navController.navigate(AppRoute.CHAT_LIST) }
+                )
+            }
+
+        }
     }
 }
 

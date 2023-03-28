@@ -24,16 +24,7 @@ fun ContactScreen(
     val viewModel = ConversationScreenViewModelSingleton()
     val uiState by viewModel.state.collectAsState()
 
-    /*val data =
-        ContactPerson(
-            uid = 123456,
-            user_name = "asd",
-            birthday_date = Date(2015 - 1900, 11, 30, 23, 59, 59),
-            relation = 1,
-            sex = 1
-        )
 
-    viewModel.add(data)*/
     var date by remember {
         mutableStateOf(listOf<ContactPerson>())
     }

@@ -9,11 +9,16 @@ import java.util.*
 
 @Entity(tableName = "ContactPerson")
 data class ContactPerson(
+    //主键 联系人id
     @PrimaryKey
     @ColumnInfo(name = "uid") val uid: Long,
+    //联系人性别 0-男 1-女
     @ColumnInfo(name = "sex") val sex: Int,
+    //联系人生日日期
     @ColumnInfo(name = "birthday_date") val birthday_date: Date,
+    //联系人姓名
     @ColumnInfo(name = "user_name") val user_name: String,
+    //关系
     @ColumnInfo(name = "relation") val relation: Int,
 )
 

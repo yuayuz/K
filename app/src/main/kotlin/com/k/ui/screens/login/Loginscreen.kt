@@ -13,12 +13,12 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import com.k.data.db.Account
 import com.k.data.viewmodel.CommentListScreenViewModelSingleton
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +51,7 @@ fun loginScreen(
         Modifier.fillMaxSize()
             .padding(contentPadding)
     ) {
+        //上部图片
         /*Image(
             painter = painterResource(id = R.drawable.login),
             contentDescription = null
@@ -146,15 +147,6 @@ fun loginScreen(
                                 password = pwd
                             )
                         )
-                        /*if (l.queryOne()==1) {
-                            //navController.navigate("MainFrame")
-                             *//*Toast.makeText(context, "登录成功", Toast.LENGTH_SHORT).show()*//*
-                                cb()//go to chat list
-                            } else if(l.queryOne()==0) {
-                                *//*Toast.makeText(context, "登录失败", Toast.LENGTH_SHORT).show()*//*
-                            } else if(l.queryOne()==2){
-                                //
-                            }*/
 
                         CoroutineScope(Dispatchers.IO).launch {
                             when (l.queryOne()) {

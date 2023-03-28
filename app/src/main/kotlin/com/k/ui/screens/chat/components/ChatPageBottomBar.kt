@@ -27,7 +27,7 @@ fun ChatPageBottomBar(
     ) {
         OutlinedTextField(
             value = text,
-            label = { Text(text = "Input something") },//这里label为文本框未输入时显示的文本
+            label = { Text(text = "Input something") },//文本框未输入时显示的文本
             onValueChange = { text = it })
 
         Button(onClick = { }) {

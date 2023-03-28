@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.k.data.db.Account
 import com.k.data.db.AccountDbSingleton
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 data class LoginListScreenState(
     val data: Account,
@@ -34,28 +36,23 @@ class LoginScreenViewModel(ctx: Context, account: Account) : ViewModel() {
         }
     }
 
-    suspend fun queryOne():Int {
-//        CoroutineScope(Dispatchers.IO).launch {
-                val s = AccountDbSingleton(state.value.ctx)
-                val data=s.accountDao().getOne(state.value.data.id)
-                s.close()
-                /*rt = if (data==null){
-                    0
-                } else if (state.value.data.password == data.password){
-                    1
-                } else{
-                    2
-                }*/
-                 val rt= when{
-                    data==null->0
-                    state.value.data.password==data.password->1
-                    else->2
-//                }
+    suspend fun queryOne(): Int {
+        val s = AccountDbSingleton(state.value.ctx)
+        val data = s.accountDao().getOne(state.value.data.id)
+        s.close()
+
+        val rt = when {
+            //无帐号信息
+            data == null -> 0
+            //密码正确
+            state.value.data.password == data.password -> 1
+            //密码错误
+            else -> 2
         }
         return rt
     }
 
-    fun revisePassword(){
+    fun revisePassword() {
         CoroutineScope(Dispatchers.IO).launch {
             val s = AccountDbSingleton(state.value.ctx)
             s.accountDao().updateOne(
@@ -70,5 +67,5 @@ class LoginScreenViewModel(ctx: Context, account: Account) : ViewModel() {
 object CommentListScreenViewModelSingleton {
 //    private var viewModel = LoginScreenViewModel()
 
-    operator fun invoke(ctx: Context, account: Account) = LoginScreenViewModel(ctx,account)
+    operator fun invoke(ctx: Context, account: Account) = LoginScreenViewModel(ctx, account)
 }

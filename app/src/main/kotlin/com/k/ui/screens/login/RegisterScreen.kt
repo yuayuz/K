@@ -45,6 +45,7 @@ fun registerScreen(
             .fillMaxSize()
             .padding(contentPadding)
     ) {
+        //上部图片
         /*Image(
             painter = painterResource(id = R.drawable.login),
             contentDescription = null

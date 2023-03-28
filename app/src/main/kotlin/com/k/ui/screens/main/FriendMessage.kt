@@ -3,11 +3,14 @@ package com.k.ui.screens.main
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,19 +19,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun newFriendScreen(
-//    contentPadding: PaddingValues,
-    navTOChatList: () -> Unit,
-    navTOFriendMessage: () -> Unit
-) {
-
-    var id by remember {
-        mutableStateOf("")
-    }
+fun FriendMessageScreen(
+    navTONewFriend:()->Unit,
+    navToChatList: () -> Unit
+){
     Box(
         Modifier.fillMaxSize()
 //            .padding(contentPadding)
     ) {
+
         Row(
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Start,
@@ -37,7 +36,7 @@ fun newFriendScreen(
             IconButton(
                 modifier = Modifier
                     .padding(20.dp),
-                onClick = { navTOChatList() },
+                onClick = { navTONewFriend() },
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
@@ -46,7 +45,7 @@ fun newFriendScreen(
             }
         }
 
-        Column {
+        Column() {
             Spacer(modifier = Modifier.weight(1f))
             Column(
                 modifier = Modifier
@@ -55,21 +54,11 @@ fun newFriendScreen(
                     .padding(40.dp)
                     .fillMaxWidth()
             ) {
-                TextField(
-                    modifier = Modifier.fillMaxWidth(),
-                    value = id,
-                    placeholder = {
-                        Text("请输入帐号")
-                    },
-                    onValueChange = { str -> id = str },
-                    colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.AccountBox,
-                            contentDescription = null
-                        )
-                    })
-
+                Text(text = "姓名")
+                Spacer(modifier = Modifier.height(50.dp))
+                Text(text = "id")
+                Spacer(modifier = Modifier.height(50.dp))
+                Text(text = "生日日期")
 
                 Spacer(modifier = Modifier.height(50.dp))
 
@@ -77,22 +66,22 @@ fun newFriendScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        navTOFriendMessage()
+                        navToChatList()
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5c59fe)),
                     contentPadding = PaddingValues(12.dp, 16.dp)
                 ) {
-                    Text("确定", color = Color.White, fontSize = 18.sp)
+                    androidx.compose.material.Text("确定", color = Color.White, fontSize = 18.sp)
                 }
             }
         }
+
     }
 }
 
 @Composable
 @Preview
-fun PreviewNewFriendScreen() {
-    newFriendScreen({}, {})
+fun PreviewFriendMessage(){
+    FriendMessageScreen ({},{})
 }
-
