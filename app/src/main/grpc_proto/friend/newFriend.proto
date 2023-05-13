@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option java_package = "grpc_code_gen.friend.newFriend";
+
+import "newFriendMessage.proto";
+
+service friendMessage{
+  rpc find(newFriendRequest) returns (newFriendReply);
+}
+
+message newFriendRequest{
+  newFriendMessageRequest id=1;
+}
+
+message newFriendReply{
+    newFriendMessageReply message=1;
+}

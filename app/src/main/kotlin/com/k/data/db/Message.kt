@@ -5,12 +5,13 @@ import androidx.room.*
 import com.k.data.converter.DateConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity(tableName = "Message")
 data class Message(
     //消息唯一id，服务器生成
-    @PrimaryKey @ColumnInfo(name = "msg_id") val msg_id: Long,
+    @PrimaryKey(autoGenerate = true)@ColumnInfo(name = "msg_id") val msg_id: Long=0,
     //所属者id
     @ColumnInfo(name = "uid") val uid: Long,
     //区分是否是自己发送消息 1-是 0-否
@@ -34,7 +35,7 @@ data class Message(
     //消息内容
     @ColumnInfo(name = "msg") val msg:String,
     //消息发送时间
-    @ColumnInfo(name="send_time") val send_time:Date,
+    @ColumnInfo(name="send_time") val send_time:LocalDateTime,
     //消息状态 发送中，发送完成，发送失败
     @ColumnInfo(name = "send_status") val send_status:Int
 
@@ -44,17 +45,26 @@ data class Message(
 @Dao
 interface MessageDao{
 
+    @Query("SELECT * FROM Message WHERE uid = (:id)")
+    suspend fun maybe(id: Long): Message?
+
     @Query("SELECT * FROM Message")
-    suspend fun getAll(): Message?
+    suspend fun getAll(): List<Message>?
+
+    @Query("SELECT * FROM Message WHERE uid = (:id)")
+    suspend fun getAllByUid(id: Long): List<Message>?
 
     @Query("SELECT * FROM Message WHERE msg_id=:msg_id")
     suspend fun getOne(msg_id: Long): Message?
 
     @Insert
-    suspend fun insertOne(account: Message)
+    suspend fun insert(message: Message)
+
+    @Insert
+    suspend fun insertOne(message: Message)
 
     @Update
-    suspend fun updateOne(account: Message)
+    suspend fun updateOne(message: Message)
 }
 
 @TypeConverters(DateConverter::class)

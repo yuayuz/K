@@ -6,21 +6,34 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class MessageScreenState(
-    val list: List<Message>
+    var list: List<Message>,
 )
 
 private fun sort(list: List<Message>) =
-    list.sortedBy { it.send_time}.reversed()
+    list.sortedBy { it.send_time}
 
-class MessageViewModel :ViewModel(){
+class MessageViewModel() :ViewModel(){
 
     private val mutState = MutableStateFlow(
         MessageScreenState(
-            listOf()
+            listOf(),
+//            ctx
         )
     )
 
     val state = mutState.asStateFlow()
+
+
+//
+//    suspend fun getAll(): List<Message>? {
+//        val s = MessageDbSingleton(state.value.ctx)
+//        val data = s.messageDao().getAll()
+//        s.close()
+//        if (data != null) {
+//            mutState.value.list=data
+//        }
+//        return data
+//    }
 
     fun reset(list: List<Message>) {
         mutState.value = MessageScreenState(
@@ -41,5 +54,6 @@ object MessageScreenViewModelSingleton {
 
     fun reset() = viewModel.reset(listOf())
 
-    operator fun invoke() = MessageViewModel()
+    operator fun invoke() = viewModel
+
 }

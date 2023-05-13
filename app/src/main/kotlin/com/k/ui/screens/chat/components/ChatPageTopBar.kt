@@ -8,11 +8,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.k.data.chat
 
 @Composable
 fun ChatPageTopBar(title: String,BU:()->Unit) {
     TopAppBar(
-        title = { Text(text = title)},
+        title = { Text(text = chat.name)},
         navigationIcon = {
             IconButton(
                 onClick = {

@@ -5,6 +5,7 @@ import androidx.room.*
 import com.k.data.converter.DateConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity(tableName = "Conversation")
@@ -29,7 +30,7 @@ data class Conversation(
     //最后发送信息人名称
     @ColumnInfo(name = "last_user_name") val last_user_name :String,
     //最后一条信息时间
-    @ColumnInfo(name = "last_time") val last_time : Date,
+    @ColumnInfo(name = "last_time") val last_time : LocalDateTime,
     //会话类型 0-个人 1-群组 2-系统
     @ColumnInfo(name = "chat_type") val chat_type : Int,
     //消息类型 文字/图片/文件/音乐
@@ -42,7 +43,10 @@ data class Conversation(
 @Dao
 interface ConversationDao{
     @Query("SELECT * FROM Conversation")
-    suspend fun getAll(): Conversation?
+    suspend fun getAll(): List<Conversation>?
+
+    @Query("SELECT * FROM Conversation WHERE ChatId=:ChatId")
+    suspend fun getOneByChatId(ChatId: Long): List<Conversation>?
 
     @Query("SELECT * FROM Conversation WHERE uid=:uid")
     suspend fun getOne(uid: Long): Conversation?

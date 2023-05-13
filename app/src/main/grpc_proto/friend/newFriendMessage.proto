@@ -1,0 +1,14 @@
+syntax="proto3";
+
+option java_package="grpc_code_gen.friend.friendMessage";
+
+message newFriendMessageRequest{
+  int64 id = 1;
+}
+
+message newFriendMessageReply{
+  int64 uid=1;
+  string user_name=2;
+  int32 sex=3;
+  string birthday_date=4;
+}

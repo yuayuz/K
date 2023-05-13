@@ -11,22 +11,37 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.k.data.db.ContactPerson
+import com.k.data.db.MessageDbSingleton
+import kotlinx.coroutines.launch
 import java.util.*
 
 @SuppressLint("SimpleDateFormat")
 @Composable
 fun ContactItem(
-    navToChat:(Long)->Unit,
-    data: ContactPerson
+    navToChat:()->Unit,
+    data: ContactPerson,
+    showMistake:()->Unit
 ) {
+
+    val ctx = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    fun tryDoEdit() = coroutineScope.launch {
+        val dao = MessageDbSingleton(ctx).messageDao()
+        if (dao.maybe(data.uid) != null)
+            navToChat()
+        else
+            navToChat()
+    }
+
     Card(
         modifier = Modifier
-            .clickable { navToChat(data.uid) },
+            .clickable { tryDoEdit() },
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.primaryContainer)
     ) {
@@ -57,17 +72,3 @@ fun ContactItem(
     }
 }
 
-@Preview
-@Composable
-fun PreviewContactItem(){
-    ContactItem(
-        navToChat ={} ,
-        ContactPerson(
-            uid = 123456,
-            user_name = "asd",
-            birthday_date = Date(2015 - 1900, 11, 30, 23, 59, 59),
-            relation = 1,
-            sex = 1
-        )
-    )
-}

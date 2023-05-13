@@ -6,21 +6,33 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 data class ConversationScreenState(
-    var list: List<ContactPerson>
+    var list: List<ContactPerson>,
 )
 
 private fun sort(list: List<ContactPerson>) =
     list.sortedBy { it.user_name}.reversed()
 
-class ConversationViewModel :ViewModel(){
+class ConversationViewModel() :ViewModel(){
 
     private var mutState = MutableStateFlow(
         ConversationScreenState(
-            listOf()
+            listOf(),
         )
     )
 
     val state = mutState.asStateFlow()
+
+
+
+    /*suspend fun getAll(): List<ContactPerson>? {
+        val s = ContactPersonDbSingleton(state.value.ctx)
+        val data = s.contactPersonDao().getAll()
+        s.close()
+        if (data != null) {
+            mutState.value.list=data
+        }
+        return data
+    }*/
 
     fun reset(list: List<ContactPerson>) {
         mutState.value = ConversationScreenState(
@@ -41,5 +53,5 @@ object ConversationScreenViewModelSingleton {
 
     fun reset() = viewModel.reset(listOf())
 
-    operator fun invoke() = ConversationViewModel()
+    operator fun invoke() = viewModel
 }

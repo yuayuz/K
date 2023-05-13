@@ -41,5 +41,5 @@ object ChatListScreenViewModelSingleton {
 
     fun reset() = viewModel.reset(listOf())
 
-    operator fun invoke() = ChatListViewModel()
+    operator fun invoke() = viewModel
 }

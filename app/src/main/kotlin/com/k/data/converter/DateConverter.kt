@@ -1,13 +1,17 @@
 package com.k.data.converter
 
 import androidx.room.TypeConverter
-import java.util.*
+import java.time.LocalDateTime
+
 
 class DateConverter {
 
     @TypeConverter
-    fun from(long: Long?): Date? = if (long == null) null else Date(long)
+    fun from(s: String?): LocalDateTime? = if (s == null) null else LocalDateTime.parse(s)
 
     @TypeConverter
-    fun into(date: Date?) :Long?= date?.time
+    fun into(date: LocalDateTime?) :String?= date?.toString()
 }
+
+
+

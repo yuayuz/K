@@ -5,17 +5,22 @@ import androidx.room.*
 import com.k.data.converter.DateConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.time.LocalDateTime
 import java.util.*
 
 @Entity(tableName = "ContactPerson")
 data class ContactPerson(
     //主键 联系人id
     @PrimaryKey
-    @ColumnInfo(name = "uid") val uid: Long,
+        @ColumnInfo(name = "uid") val uid: Long,
     //联系人性别 0-男 1-女
+
+    @ColumnInfo(name = "UserId") val UserId :Long,
+    //标记一台设备上某个用户的唯一回话，用于更新避免插入多条数据
+
     @ColumnInfo(name = "sex") val sex: Int,
     //联系人生日日期
-    @ColumnInfo(name = "birthday_date") val birthday_date: Date,
+    @ColumnInfo(name = "birthday_date") val birthday_date: LocalDateTime,
     //联系人姓名
     @ColumnInfo(name = "user_name") val user_name: String,
     //关系
@@ -27,6 +32,9 @@ data class ContactPerson(
 interface ContactPersonDao {
     @Query("SELECT * FROM ContactPerson")
     suspend fun getAll(): List<ContactPerson>?
+
+    @Query("SELECT * FROM ContactPerson WHERE UserId=:UserId")
+    suspend fun getOneByUserId(UserId: Long): List<ContactPerson>?
 
     @Query("SELECT * FROM ContactPerson WHERE uid=:uid")
     suspend fun getOne(uid: Long): ContactPerson?

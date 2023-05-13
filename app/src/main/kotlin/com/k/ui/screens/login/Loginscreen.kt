@@ -20,6 +20,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.k.data.db.Account
+import com.k.data.user
 import com.k.data.viewmodel.CommentListScreenViewModelSingleton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,6 @@ fun loginScreen(
 ) {
     var id by remember { mutableStateOf("") }
     var pwd by remember { mutableStateOf("") }
-
     val ctx = LocalContext.current
     val pwdVisualTransformation = PasswordVisualTransformation()
     var showPwd by remember {
@@ -155,6 +155,8 @@ fun loginScreen(
                                 2 -> showMistake()
                             }
                         }
+                        user.id=id.toLong()
+                        user.password= pwd
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5c59fe)),

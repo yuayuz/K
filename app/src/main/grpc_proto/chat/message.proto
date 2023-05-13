@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+option java_package = "grpc_code_gen.chat.message";
+
+service message{
+  rpc find(MessageRequest) returns (MessageReply);
+}
+
+message MessageRequest{
+  int64 msg_id=1;
+  //所属者id
+  int64 uid=2;
+  //区分是否是自己发送消息 1-是 0-否
+  bool is_me=3;
+  //消息发送者id
+  int64 from=4;
+  //消息发送者头像
+  /**/
+  //消息发送者名称
+  string from_name=5;
+  //消息接收者id
+  int64 to=6;
+  //消息接收者头像
+  /**/
+  //消息接收者名称
+  string to_name=7;
+  //会话类型 0-个人 1-群组 3-系统
+  int32 chat_type=8;
+  //消息类型 文字/图片/文件/音乐
+  int32 msg_type=9;
+  //消息内容
+  string msg=10;
+  //消息发送时间
+  string send_time=11;
+  //消息状态 发送中，发送完成，发送失败
+  int32 send_status=12;
+}
+
+message MessageReply{
+  int64 msg_id=1;
+  //所属者id
+  int64 uid=2;
+  //区分是否是自己发送消息 1-是 0-否
+  bool is_me=3;
+  //消息发送者id
+  int64 from=4;
+  //消息发送者头像
+  /**/
+  //消息发送者名称
+  string from_name=5;
+  //消息接收者id
+  int64 to=6;
+  //消息接收者头像
+  /**/
+  //消息接收者名称
+  string to_name=7;
+  //会话类型 0-个人 1-群组 3-系统
+  int32 chat_type=8;
+  //消息类型 文字/图片/文件/音乐
+  int32 msg_type=9;
+  //消息内容
+  string msg=10;
+  //消息发送时间
+  string send_time=11;
+  //消息状态 发送中，发送完成，发送失败
+  int32 send_status=12;
+}
