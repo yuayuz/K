@@ -1,7 +1,6 @@
 package com.k.ui.screens.main
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -22,7 +21,7 @@ import kotlinx.coroutines.withContext
 
 @Composable
 fun ChatListScreen(
-    contentPadding: PaddingValues,
+//    contentPadding: PaddingValues,
     navToChat: (Long) -> Unit
 ) {
     val ctx = LocalContext.current
@@ -41,7 +40,7 @@ fun ChatListScreen(
     Column(
         Modifier
             .fillMaxSize()
-            .padding(contentPadding)
+//            .padding(contentPadding)
             .padding(horizontal = 10.dp)
     ) {
         CardList(

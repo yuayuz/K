@@ -2,7 +2,6 @@ package com.k.ui.screens.main
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
@@ -24,7 +23,7 @@ import java.util.*
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ContactScreen(
-    contentPadding: PaddingValues,
+//    contentPadding: PaddingValues,
     navToChat: (Long) -> Unit,
     showMistake:()->Unit
 ) {
@@ -56,7 +55,7 @@ fun ContactScreen(
     Column(
         Modifier
             .fillMaxSize()
-            .padding(contentPadding)
+//            .padding(contentPadding)
             .padding(horizontal = 10.dp)
     ) {
         CardList(

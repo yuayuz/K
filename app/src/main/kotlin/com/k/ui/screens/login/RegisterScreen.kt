@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun registerScreen(
-    contentPadding: PaddingValues,
+//    contentPadding: PaddingValues,
     sNavToLogin: () -> Unit,
     navToLogin:()->Unit,
     showRegistered: () -> Unit
@@ -43,7 +43,7 @@ fun registerScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .padding(contentPadding)
+//            .padding(contentPadding)
     ) {
         //上部图片
         /*Image(

@@ -20,7 +20,7 @@ import com.k.data.viewmodel.CommentListScreenViewModelSingleton
 
 @Composable
 fun reviseScreen(
-    contentPadding: PaddingValues,
+//    contentPadding: PaddingValues,
     sNavToLogin: () -> Unit,
     navToLogin:()->Unit,
     navToChatList:()->Unit,
@@ -40,7 +40,7 @@ fun reviseScreen(
     Box(
         Modifier
             .fillMaxSize()
-            .padding(contentPadding)
+//            .padding(contentPadding)
     ) {
         //上部图片
         /*Image(
