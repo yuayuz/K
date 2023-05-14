@@ -10,7 +10,7 @@ data class MessageScreenState(
 )
 
 private fun sort(list: List<Message>) =
-    list.sortedBy { it.send_time}
+    list.sortedByDescending { it.send_time}
 
 class MessageViewModel() :ViewModel(){
 

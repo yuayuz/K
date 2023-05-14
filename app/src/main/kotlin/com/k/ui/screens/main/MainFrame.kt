@@ -3,6 +3,7 @@ package com.k.ui.screens.main
 import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
@@ -18,23 +19,38 @@ import androidx.navigation.navArgument
 import com.k.data.chat
 import com.k.route.AppRoute
 import com.k.ui.screens.chat.Chat
-import com.k.ui.screens.login.registerScreen
+import com.k.ui.screens.chat.components.ChatPageBottomBar
+import com.k.ui.screens.chat.components.ChatPageTopBar
 import com.k.ui.screens.login.reviseScreen
 import com.k.ui.screens.main.components.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition",
+    "UnusedMaterialScaffoldPaddingParameter"
+)
 @Composable
 fun MainFrame(
     onLogout: () -> Unit
 ) {
-    val scaffoldState= rememberScaffoldState()
-    val coroutineScope= rememberCoroutineScope()
-    val navController = rememberNavController()
+
+
+    var id by remember {
+        mutableStateOf(Long.MAX_VALUE)
+    }
     val ctx = LocalContext.current
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+    val drawerState = scaffoldState.drawerState
+    val navController = rememberNavController()
+    var title by remember { mutableStateOf("Main") }
+    val idNavArg = navArgument("id") { type = NavType.LongType }
+    val getIdNavArg = { entry: NavBackStackEntry ->
+        entry.arguments!!.getLong("id")
+    }
+//    var isLogin by remember { mutableStateOf(true) }
+    var mainStatus by remember { mutableStateOf(0) }
 
     fun navTo(dest: String) {
         navController.navigate(dest) {
@@ -43,18 +59,22 @@ fun MainFrame(
         }
     }
 
-    val idNavArg = navArgument("id") { type = NavType.LongType }
-    val getIdNavArg = { entry: NavBackStackEntry ->
-        entry.arguments!!.getLong("id")
-    }
-
     Scaffold(
-        scaffoldState=scaffoldState,
+//        contentWindowInsets = WindowInsetsEmpty,
+        scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            TopBar(
-                title = "Main"
-            ) { coroutineScope.launch { scaffoldState.drawerState.open() } }
+            if (mainStatus == 1) {
+                TopBar(title) {
+                    scope.launch {
+                        if (drawerState.isClosed) drawerState.open() else drawerState.close()
+                    }
+                }
+            } else if (mainStatus == 2) {
+                ChatPageTopBar(title = chat.name) {
+                    navController.navigate(AppRoute.CHAT_LIST)
+                }
+            }
         },
         drawerContent = {
             DrawerContentTopBar()
@@ -65,35 +85,51 @@ fun MainFrame(
             }
         },
         bottomBar = {
-            BottomNavBar(navController, dataList) {
-                navController.navigate(it)
+            dataList
+            if (mainStatus == 1) {
+                BottomNavBar(navController, dataList) {
+                    navController.navigate(it)
+                }
+            } else if (mainStatus == 2) {
+                ChatPageBottomBar()
             }
-        },
-
+        }
+    ) {
+            MainPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = AppRoute.CHAT_LIST,
+            modifier = Modifier.padding(MainPadding)
         ) {
-        NavHost(navController = navController, startDestination = AppRoute.LOGIN) {
-
-            composable(AppRoute.APP){
-
-            }
-
             composable(
                 AppRoute.CHAT_LIST
             ) {
+                mainStatus = 1
                 ChatListScreen(
+//                    contentPadding = MainPadding,
                     navToChat = {
-//                            id:Long ->
-//                        navTo("${AppRoute.CHAT}/$id")
-                        navController.navigate(AppRoute.THIRD)
-
+                            id: Long ->
+                        navTo("${AppRoute.CHAT}/${id}"
+                        )
                     }
                 )
             }
 
+            composable(
+                "${AppRoute.CHAT}/{id}",
+                arguments = listOf(idNavArg)
+            ) { entry ->
+                mainStatus = 2
+                val id = getIdNavArg(entry)
+                chat.uid = id
+                Chat(id)
+            }
             composable(AppRoute.CONTACT) {
+                mainStatus = 1
                 ContactScreen(
+//                    contentPadding = MainPadding,
                     navToChat = { id: Long ->
-                        navTo("${AppRoute.CHAT}/$id")
+                        navTo("${AppRoute.CHAT}/${id}")
                     },
                     showMistake = {
                         CoroutineScope(Dispatchers.Main).launch {
@@ -104,23 +140,45 @@ fun MainFrame(
             }
 
             composable(AppRoute.THIRD) {
-                Third(
+                mainStatus = 1
+                Third()
+            }
+            /*composable(AppRoute.LOGIN) {
+                mainStatus = 0
+                loginScreen(
+                    navToMain = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            navTo(AppRoute.CHAT_LIST)
+                        }
+                    },
+                    navToLogin = { navTo(AppRoute.REGISTER) },
+                    showNoRegister = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(ctx, "帐号未注册", Toast.LENGTH_SHORT).show()
+                            navTo(AppRoute.REGISTER)
+                        }
+                    },
+                    showMistake = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            Toast.makeText(ctx, "帐号/密码错误", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    navToRevise = {
+                        navTo(AppRoute.REVISE)
+                    }
                 )
-            }
+            }*/
 
-            composable(
-                "${AppRoute.CHAT}/{id}",
-                arguments = listOf(idNavArg)
-            ) { entry ->
-                val id = getIdNavArg(entry)
-                chat.uid = id
-                Chat(navController, id)
-            }
+/*            composable(AppRoute.MAIN) {
+                navTo(AppRoute.CHAT_LIST)
+//                navTo(AppRoute.MAIN)
+//                MainFrame(onLogout = { false })
+            }*/
 
-
-            composable(AppRoute.REGISTER) {
+            /*composable(AppRoute.REGISTER) {
+                mainStatus = 0
                 registerScreen(
-//                    contentPadding = MainPadding,
+                    contentPadding = MainPadding,
                     sNavToLogin = {
                         CoroutineScope(Dispatchers.Main).launch {
                             Toast.makeText(ctx, "帐号注册成功", Toast.LENGTH_SHORT).show()
@@ -141,8 +199,9 @@ fun MainFrame(
                 )
             }
             composable(AppRoute.REVISE) {
+                mainStatus = 0
                 reviseScreen(
-//                    contentPadding = MainPadding,
+                    contentPadding = MainPadding,
                     sNavToLogin = {
                         Toast.makeText(ctx, "帐号密码修改成功", Toast.LENGTH_SHORT).show()
                         navTo(AppRoute.LOGIN)
@@ -151,9 +210,10 @@ fun MainFrame(
                     navToChatList = {},
                     from = true
                 )
-            }
+            }*/
 
             composable(AppRoute.FORGET) {
+                mainStatus = 0
                 reviseScreen(
 //                    contentPadding = MainPadding,
                     sNavToLogin = {
@@ -167,6 +227,7 @@ fun MainFrame(
             }
 
             composable(AppRoute.NEW_FRIEND) {
+                mainStatus = 0
                 NewFriendScreen(
 //                    contentPadding = MainPadding,
                     navTOChatList = { navTo(AppRoute.CHAT_LIST) },
@@ -175,39 +236,15 @@ fun MainFrame(
             }
 
             composable(AppRoute.NEW_FRIEND_Message) {
+                mainStatus = 0
                 FriendMessageScreen(
                     navTONewFriend = { navTo(AppRoute.NEW_FRIEND) },
                     navToChatList = { navTo(AppRoute.CHAT_LIST) }
                 )
             }
-            /*composable(AppRoute.LOGIN) {
-                loginScreen(
-                   *//* navToMain = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            navTo(AppRoute.MAIN)
-                        }
-                    },
-                    navToLogin = { navTo(AppRoute.REGISTER) },
-                    showNoRegister = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            Toast.makeText(ctx, "帐号未注册", Toast.LENGTH_SHORT).show()
-                            navTo(AppRoute.REGISTER)
-                        }
-                    },
-                    showMistake = {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            Toast.makeText(ctx, "帐号/密码错误", Toast.LENGTH_SHORT).show()
-                        }
-                    },
-                    navToRevise = {
-                        navTo(AppRoute.REVISE)
-                    }*//*
-                )
-            }*/
-
 
         }
     }
-
 }
+
 
