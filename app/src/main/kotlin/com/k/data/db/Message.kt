@@ -17,13 +17,13 @@ data class Message(
     //区分是否是自己发送消息 1-是 0-否
     @ColumnInfo(name = "is_me") val is_me: Boolean,
     //消息发送者id
-    @ColumnInfo(name = "from_id") val from: Long,
+    @ColumnInfo(name = "from") val from: Long,
     //消息发送者头像
     /*@ColumnInfo(name = "from_avatar") val from_avatar*/
     //消息发送者名称
     @ColumnInfo(name = "from_name") val from_name : String,
     //消息接收者id
-    @ColumnInfo(name = "to_id") val to: Long,
+    @ColumnInfo(name = "to") val to: Long,
     //消息接收者头像
     /*@ColumnInfo(name = "to_avatar") val to_avatar*/
     //消息接收者名称
@@ -44,9 +44,6 @@ data class Message(
 
 @Dao
 interface MessageDao{
-
-    @Query("SELECT  * FROM Message WHERE (from_id = (:id) and to_id = (:chat_id)) or (from_id = (:chat_id) and to_id = (:id)) ")
-    suspend fun s(id: Long,chat_id:Long):List<Message>?
 
     @Query("SELECT * FROM Message WHERE uid = (:id)")
     suspend fun maybe(id: Long): Message?

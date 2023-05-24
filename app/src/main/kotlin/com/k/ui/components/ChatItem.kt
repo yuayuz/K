@@ -25,9 +25,7 @@ fun ChatItem(
 
     Card(
         modifier = Modifier
-            .clickable {
-                navToChat(data.uid)
-                       },
+            .clickable { navToChat(data.uid) },
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.primaryContainer
         )

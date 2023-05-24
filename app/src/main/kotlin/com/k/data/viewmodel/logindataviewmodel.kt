@@ -11,20 +11,16 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class LoginListScreenState(
-    val id:Long,
-    val name: String?,
-    val password:String,
-    val ctx: Context
+    val data: Account,
+    val ctx: Context,
 )
 
 
-class LoginScreenViewModel(ctx: Context, id: Long,password: String,name: String?) : ViewModel() {
+class LoginScreenViewModel(ctx: Context, account: Account) : ViewModel() {
     private val mutState = MutableStateFlow(
         LoginListScreenState(
-            id,
-            name,
-            password,
-            ctx
+            account,
+            ctx,
         )
     )
 
@@ -34,11 +30,7 @@ class LoginScreenViewModel(ctx: Context, id: Long,password: String,name: String?
         CoroutineScope(Dispatchers.IO).launch {
             val s = AccountDbSingleton(state.value.ctx)
             s.accountDao().insertOne(
-                account = Account(
-                    state.value.id,
-                    state.value.name,
-                    state.value.password
-                )
+                account = state.value.data
             )
             s.close()
         }
@@ -46,14 +38,14 @@ class LoginScreenViewModel(ctx: Context, id: Long,password: String,name: String?
 
     suspend fun queryOne(): Int {
         val s = AccountDbSingleton(state.value.ctx)
-        val data = s.accountDao().getOne(state.value.id)
+        val data = s.accountDao().getOne(state.value.data.id)
         s.close()
 
         val rt = when {
             //无帐号信息
             data == null -> 0
             //密码正确
-            state.value.password == data.password -> 1
+            state.value.data.password == data.password -> 1
             //密码错误
             else -> 2
         }
@@ -64,11 +56,7 @@ class LoginScreenViewModel(ctx: Context, id: Long,password: String,name: String?
         CoroutineScope(Dispatchers.IO).launch {
             val s = AccountDbSingleton(state.value.ctx)
             s.accountDao().updateOne(
-                account =Account(
-                    state.value.id,
-                    state.value.name,
-                    state.value.password
-                )
+                account = state.value.data
             )
             s.close()
         }
@@ -79,5 +67,5 @@ class LoginScreenViewModel(ctx: Context, id: Long,password: String,name: String?
 object CommentListScreenViewModelSingleton {
 //    private var viewModel = LoginScreenViewModel()
 
-    operator fun invoke(ctx: Context, id: Long,password: String,name: String?) = LoginScreenViewModel(ctx, id,password,name)
+    operator fun invoke(ctx: Context, account: Account) = LoginScreenViewModel(ctx, account)
 }
