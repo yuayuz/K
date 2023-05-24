@@ -15,7 +15,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.k.data.db.Account
-import com.k.data.repositories.AccountRepositories
+import com.k.data.viewmodel.CommentListScreenViewModelSingleton
 
 
 @Composable
@@ -127,15 +127,14 @@ fun reviseScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-
-                        val accountRepositories= AccountRepositories(ctx)
-                        val data=accountRepositories.accountQueryOne(id.toLong(),pwd)
-                        val account = Account(
-                            id=id.toLong(),
-                            name= data?.name,
-                            password=pwd
+                        val l = CommentListScreenViewModelSingleton(
+                            ctx = ctx,
+                            account = Account(
+                                id = id.toLong(),
+                                password = pwd
+                            )
                         )
-                        accountRepositories.accountRevisePassword(account)
+                        l.revisePassword()
                         when(from){
                             true->navToLogin()
                             false->sNavToLogin()

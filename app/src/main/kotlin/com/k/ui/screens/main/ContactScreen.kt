@@ -6,40 +6,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.k.data.db.ContactPerson
-import com.k.data.db.ContactPersonDbSingleton
-import com.k.data.user
 import com.k.data.viewmodel.ConversationScreenViewModelSingleton
 import com.k.ui.components.CardList
 import com.k.ui.components.ContactItem
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import java.util.*
 
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun ContactScreen(
+<<<<<<< HEAD
 //    contentPadding: PaddingValues,
     navToChat: (Long) -> Unit,
     showMistake:()->Unit
+=======
+    contentPadding: PaddingValues,
+    navToChat: (Long) -> Unit
+>>>>>>> parent of 512caaf (chat)
 ) {
-
-    val ctx = LocalContext.current
-    val d :List<ContactPerson>
-    runBlocking{
-        d = withContext(Dispatchers.IO){
-            val s = ContactPersonDbSingleton(ctx)
-            return@withContext s.contactPersonDao().getOneByUserId(user.id)!!
-        }
-    }
-    val l = ConversationScreenViewModelSingleton
-    l().reset(d)
-    val uiState by l().state.collectAsState()
-
+    val viewModel = ConversationScreenViewModelSingleton()
+    val uiState by viewModel.state.collectAsState()
 
 
     var date by remember {
@@ -60,19 +48,22 @@ fun ContactScreen(
     ) {
         CardList(
             itemFetcher = {
-                uiState.list
+                ContactDataList
             },
             itemRender = {
-                val id=it.uid
-                ContactItem(
-                    {navToChat(id)},
-                    it,
-                    showMistake = { showMistake() }
-                )
+                ContactItem(navToChat, it)
             }
         )
     }
 }
 
-
+val ContactDataList = List(8) {
+    ContactPerson(
+        uid = 123456,
+        user_name = "asd",
+        birthday_date = Date(2015 - 1900, 11, 30, 23, 59, 59),
+        relation = 1,
+        sex = 1
+    )
+}
 

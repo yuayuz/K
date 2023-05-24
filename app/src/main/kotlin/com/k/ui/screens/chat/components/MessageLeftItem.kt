@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.k.data.db.Message
-import java.time.LocalDateTime
+import java.util.*
 
 @Composable
 fun MessageLeftItem(msg: Message) {
@@ -109,7 +109,7 @@ fun PreviewMessageLeftItem() {
                     "昔孟母，择邻处。子不学，断机杼。\n" +
                     "\n" +
                     "窦燕山，有义方。教五子，名俱扬。",
-            send_time = LocalDateTime.now(),
+            send_time = Date(2015 - 1900, 11, 30, 23, 59, 59),
             send_status = 1
         )
     )

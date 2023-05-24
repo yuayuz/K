@@ -11,22 +11,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.k.data.newFriend
-
 
 @Composable
-fun NewFriendScreen(
+fun newFriendScreen(
 //    contentPadding: PaddingValues,
     navTOChatList: () -> Unit,
-    navTOFriendMessage: () -> Unit,
-){
+    navTOFriendMessage: () -> Unit
+) {
 
     var id by remember {
         mutableStateOf("")
     }
-
     Box(
         Modifier.fillMaxSize()
 //            .padding(contentPadding)
@@ -72,13 +70,13 @@ fun NewFriendScreen(
                         )
                     })
 
+
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Button(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        newFriend.uid=id.toLong()
                         navTOFriendMessage()
                     },
                     shape = RoundedCornerShape(50),
@@ -92,5 +90,9 @@ fun NewFriendScreen(
     }
 }
 
-
+@Composable
+@Preview
+fun PreviewNewFriendScreen() {
+    newFriendScreen({}, {})
+}
 

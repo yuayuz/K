@@ -1,6 +1,7 @@
 package com.k.route
 
 object AppRoute {
+<<<<<<< HEAD
     //老妹屏幕
     const val CHAT_LIST = "ChatListScreen"
     //老妹屏幕
@@ -12,7 +13,7 @@ object AppRoute {
     //登录老妹
     const val LOGIN = "loginScreen"
     //主老妹
-    const val MAIN = "MainFrame"
+    const val APP = "App"
     //
     const val SHOW_MESSAGE = "ShowMessage"
     //注册老妹
@@ -31,6 +32,8 @@ object AppRoute {
 *
 
 object AppRoute {
+=======
+>>>>>>> parent of 512caaf (chat)
     //会话屏幕
     const val CHAT_LIST = "ChatListScreen"
     //聊天屏幕
@@ -56,5 +59,3 @@ object AppRoute {
     //新朋友信息
     const val NEW_FRIEND_Message="FriendMessageScreen"
 }
-
-* */

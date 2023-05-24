@@ -13,7 +13,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.k.data.db.Conversation
-import java.time.LocalDateTime
 import java.util.*
 
 @SuppressLint("SimpleDateFormat")
@@ -25,9 +24,7 @@ fun ChatItem(
 
     Card(
         modifier = Modifier
-            .clickable {
-                navToChat(data.uid)
-                       },
+            .clickable { navToChat(data.uid) },
         colors = CardDefaults.cardColors(
             MaterialTheme.colorScheme.primaryContainer
         )
@@ -82,7 +79,7 @@ fun PreviewChatItem() {
         to = 0,
         last_msg_id = 0,
         last_user_name = "a",
-        last_time = LocalDateTime.now(),
+        last_time = Date(2015 - 1900, 11, 30, 23, 59, 59),
         chat_type = 1,
         msg_type = 1,
         unread_count = 1,

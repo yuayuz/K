@@ -11,7 +11,9 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.k.data.db.ContactPerson
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -60,23 +62,23 @@ fun <T> CardList(
     }
 }
 
-//@Preview
-//@Composable
-//fun CardListPreview() {
-//    CardList(
-//        itemFetcher = {
-//            List(4) {
-//                ContactPerson(
-//                    uid = 123456,
-//                    user_name = "asd",
-//                    birthday_date = Date(2015 - 1900, 11, 30, 23, 59, 59),
-//                    relation = 1,
-//                    sex = 1
-//                )
-//            }
-//        },
-//        itemRender = @Composable {
-//            ContactItem({}, it)
-//        }
-//    )
-//}
+@Preview
+@Composable
+fun CardListPreview() {
+    CardList(
+        itemFetcher = {
+            List(4) {
+                ContactPerson(
+                    uid = 123456,
+                    user_name = "asd",
+                    birthday_date = Date(2015 - 1900, 11, 30, 23, 59, 59),
+                    relation = 1,
+                    sex = 1
+                )
+            }
+        },
+        itemRender = @Composable {
+            ContactItem({}, it)
+        }
+    )
+}
