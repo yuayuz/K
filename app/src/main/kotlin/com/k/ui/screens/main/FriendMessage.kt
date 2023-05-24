@@ -82,6 +82,7 @@ fun FriendMessageScreen(
         thread.uncaughtExceptionHandler?.uncaughtException(thread, e)
 
     }
+
     val ctx = LocalContext.current
     fun contactPersonInsertOne(contactPerson: ContactPerson) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -180,7 +181,6 @@ fun FriendMessageScreen(
                         )
                         contactPersonInsertOne(contactPerson)
                         conversationInsertOne(conversation)
-                        channel.shutdown()
                         navToChatList()
                     },
                     shape = RoundedCornerShape(50),

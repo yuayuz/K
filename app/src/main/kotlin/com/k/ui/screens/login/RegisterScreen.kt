@@ -15,10 +15,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.k.data.db.Account
-import com.k.data.viewmodel.CommentListScreenViewModelSingleton
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.k.data.repositories.AccountRepositories
 
 
 @Composable
@@ -29,7 +26,7 @@ fun registerScreen(
     showRegistered: () -> Unit
 
 ) {
-    var rt by remember { mutableStateOf(0) }
+    var name by remember { mutableStateOf("") }
     var id by remember { mutableStateOf("") }
     var pwd by remember { mutableStateOf("") }
     val ctx = LocalContext.current
@@ -92,6 +89,20 @@ fun registerScreen(
                             )
                         })
                     TextField(
+                        modifier = Modifier.fillMaxWidth(),
+                        value = id,
+                        placeholder = {
+                            Text("请输入名称")
+                        },
+                        onValueChange = { str -> name = str },
+                        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.Transparent),
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Default.AccountBox,
+                                contentDescription = null
+                            )
+                        })
+                    TextField(
                         value = pwd, onValueChange = { str -> pwd = str },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = {
@@ -130,21 +141,27 @@ fun registerScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
-                        val l = CommentListScreenViewModelSingleton(
-                            ctx = ctx,
-                            account = Account(
-                                id = id.toLong(),
-                                password = pwd
-                            )
+                        val account = Account(
+                            id=id.toLong(),
+                            name=name,
+                            password=pwd
                         )
-                        CoroutineScope(Dispatchers.IO).launch {
+                        val accountRepositories= AccountRepositories(ctx)
+                        val data=accountRepositories.accountQueryOne(id.toLong(),pwd)
+                        when (data) {
+                            null -> accountRepositories.accountInsertOne(account = account)
+                            else -> showRegistered()
+                        }
+
+                        if (data == null) sNavToLogin()
+                        /*CoroutineScope(Dispatchers.IO).launch {
                             val judge = l.queryOne()
                             when (judge) {
                                 0 -> l.insertOne()
                                 else -> showRegistered()
                             }
                             if (judge == 0) sNavToLogin()
-                        }
+                        }*/
                     },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color(0xff5c59fe)),

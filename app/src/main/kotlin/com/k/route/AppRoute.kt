@@ -12,7 +12,7 @@ object AppRoute {
     //登录老妹
     const val LOGIN = "loginScreen"
     //主老妹
-    const val APP = "App"
+    const val MAIN = "MainFrame"
     //
     const val SHOW_MESSAGE = "ShowMessage"
     //注册老妹
